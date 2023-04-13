@@ -24,6 +24,18 @@ const loginAdminUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const data = await userService.loginUser(req.body);
+    return res.status(data.statusCode).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Unable to login admin at the moment. Please try again later.',
+      error,
+    });
+  }
+};
+
 const markLateUser = async (req, res) => {
   try {
     const data = await userService.markLateUser(req.params.id);
@@ -66,4 +78,5 @@ module.exports = Object.freeze({
   markLateUser,
   getAllUsers,
   deleteUser,
+  loginUser,
 });

@@ -4,8 +4,8 @@ const cors = require('cors');
 const logger = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const userRoutes = require('../routes/users.routes');
-const { errorHandler } = require('../middlewares/error.middleware');
+
+const routes = require('../routes/index.routes');
 
 const app = express();
 // const router = express.Router();
@@ -26,7 +26,8 @@ app.use(cors());
 
 // app.use(errorHandler);
 
-app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/users', routes.userRoutes);
+app.use('/api/v1/testimonies', routes.testimonyRoutes);
 
 //default route
 app.get('/', (req, res) => {

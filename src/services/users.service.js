@@ -83,6 +83,50 @@ const loginAdminUser = async (payload) => {
     throw new Error(`${error}`);
   }
 };
+const loginUser = async (payload) => {
+  try {
+    const foundUser = await userRepo.getOne({ email: payload.email });
+    if (!foundUser) {
+      return buildFailedResponse({ message: 'User not found' });
+    }
+
+    // compare password
+    const passwordIsValid = await comparePassword(
+      payload.password,
+      foundUser.password
+    );
+    if (!passwordIsValid) {
+      return buildFailedResponse({ message: 'Invalid Password' });
+    }
+
+    const token = generateJwt({
+      _id: foundUser._id,
+      email: foundUser.email,
+      phone: foundUser.phone,
+      category: foundUser.category,
+      firstName: foundUser.firstName,
+      lastName: foundUser.lastName,
+      role: foundUser.role,
+    });
+
+    delete foundUser.password;
+
+    const responseData = {
+      firstName: foundUser.firstName,
+      lastName: foundUser.lastName,
+      email: foundUser.email,
+      phone: foundUser.phone,
+      role: foundUser.role,
+    };
+
+    return buildResponse({
+      data: responseData,
+      token,
+    });
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+};
 
 const markLateUser = async (id) => {
   try {
@@ -144,4 +188,5 @@ module.exports = Object.freeze({
   markLateUser,
   getUsers,
   deleteUser,
+  loginUser,
 });
