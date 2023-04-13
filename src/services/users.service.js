@@ -35,6 +35,56 @@ const createUser = async (payload) => {
   }
 };
 
+const loginAdminUser = async (payload) => {
+  try {
+    const foundUser = await userRepo.getOne({ email: payload.email });
+    if (!foundUser) {
+      return buildFailedResponse({ message: 'User not found' });
+    }
+
+    if (!['admin', 'superAdmin'].includes(foundUser.role)) {
+      return buildFailedResponse({ message: 'User not an Admin' });
+    }
+
+    // compare password
+    const passwordIsValid = await comparePassword(
+      payload.password,
+      foundUser.password
+    );
+    if (!passwordIsValid) {
+      return buildFailedResponse({ message: 'Invalid Password' });
+    }
+
+    const token = generateJwt({
+      _id: foundUser._id,
+      email: foundUser.email,
+      phone: foundUser.phone,
+      category: foundUser.category,
+      firstName: foundUser.firstName,
+      lastName: foundUser.lastName,
+      role: foundUser.role,
+    });
+
+    delete foundUser.password;
+
+    const responseData = {
+      firstName: foundUser.firstName,
+      lastName: foundUser.lastName,
+      email: foundUser.email,
+      phone: foundUser.phone,
+      role: foundUser.role,
+    };
+
+    return buildResponse({
+      data: responseData,
+      token,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = Object.freeze({
   createUser,
+  loginAdminUser,
 });

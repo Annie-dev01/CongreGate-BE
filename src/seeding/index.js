@@ -1,14 +1,17 @@
+const { BCRYPT_SALT } = require('../config/env');
 const User = require('../models/user.model');
+const { generateSalt, hashPassword } = require('../utils');
 
 const seedAdmin = async () => {
   const foundAdmin = await User.find({ role: 'admin' });
   if (foundAdmin.length < 1) {
+    const salt = await generateSalt(Number(BCRYPT_SALT));
     const data = {
       firstName: 'Church',
       lastName: 'Admin',
       email: 'admin@gmail.com',
       phone: '08011223344',
-      password: 'testing',
+      password: await hashPassword('testing', salt),
       address: 'F5 Police Estate Kubwa',
       dateOfBirth: '26/08/1996',
       occupation: 'Admin',
