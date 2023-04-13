@@ -66,6 +66,18 @@ const userSchema = new mongoose.Schema(
     profileImg: {
       type: String,
     },
+    isLate: {
+      type: Boolean,
+      default: false,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

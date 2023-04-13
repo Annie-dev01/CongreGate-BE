@@ -15,7 +15,7 @@ const seedAdmin = async () => {
       address: 'F5 Police Estate Kubwa',
       dateOfBirth: '26/08/1996',
       occupation: 'Admin',
-      role: 'admin',
+      role: 'superAdmin',
       gender: 'male',
       isMarried: false,
       units: ['Choir'],

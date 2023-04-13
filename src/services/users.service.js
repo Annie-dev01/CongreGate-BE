@@ -31,7 +31,7 @@ const createUser = async (payload) => {
       message: 'User created successfully',
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(`${error}`);
   }
 };
 
@@ -80,11 +80,68 @@ const loginAdminUser = async (payload) => {
       token,
     });
   } catch (error) {
-    console.log(error);
+    throw new Error(`${error}`);
+  }
+};
+
+const markLateUser = async (id) => {
+  try {
+    const foundUser = await userRepo.getOne({ _id: id });
+    if (!foundUser) {
+      return buildFailedResponse({ message: 'Member not found' });
+    }
+    const updatedUser = await userRepo.updateUser(
+      { _id: id },
+      { isLate: true },
+      { new: true }
+    );
+
+    return buildResponse({
+      message: 'Member marked as late',
+      data: updatedUser,
+    });
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+};
+const deleteUser = async (id) => {
+  try {
+    const foundUser = await userRepo.getOne({ _id: id });
+    if (!foundUser) {
+      return buildFailedResponse({ message: 'Member not found' });
+    }
+    const updatedUser = await userRepo.updateUser(
+      { _id: id },
+      { deleted: true },
+      { new: true }
+    );
+
+    return buildResponse({
+      message: 'Member deleted',
+      data: updatedUser,
+    });
+  } catch (error) {
+    throw new Error(`${error}`);
+  }
+};
+
+const getUsers = async (query = {}) => {
+  try {
+    const foundUsers = await userRepo.getAll({
+      ...query,
+      isLate: false,
+      deleted: false,
+    });
+    return buildResponse({ message: 'Users fetched', data: foundUsers });
+  } catch (error) {
+    throw new Error(`${error}`);
   }
 };
 
 module.exports = Object.freeze({
   createUser,
   loginAdminUser,
+  markLateUser,
+  getUsers,
+  deleteUser,
 });
