@@ -1,15 +1,12 @@
-# Node JS Base Bootstrapped Project
+# CongreGate API
 
-This is a bootstrapped node js and express project, which could save developers time required to build a node js backend project from scratch.
-
-NB: This was not built with typescript. Typescript version of this is coming soon.
-
-A very fast and optimized server spitting 🔥🔥🔥🔥
+CongreGate is a church management system for managing people, tracking events as well as connecting members in same religious organization (church).
 
 ## Installation and API Consumption
-* Clone this repository
-* Install all dependencies ```yarn install```
-* Copy the .env.example file ```cp .env.example .env```
-* For development server, run ```yarn run watch```
+
+- Clone this repository
+- Install all dependencies `yarn install`
+- Copy the .env.example file `cp .env.example .env`
+- For development server, run `yarn run watch`
 
 ### Enjoy the graciousness of my server 🤪
