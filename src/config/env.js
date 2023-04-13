@@ -3,6 +3,6 @@ const dotenv = require('dotenv');
 // loading .env
 dotenv.config();
 
-const { NODE_ENV, PORT, DBURL, HOST_NAME } = process.env;
+const { NODE_ENV, PORT, DBURL, HOST_NAME, BCRYPT_SALT } = process.env;
 
-module.exports = { NODE_ENV, PORT, DBURL, HOST_NAME };
+module.exports = { NODE_ENV, PORT, DBURL, HOST_NAME, BCRYPT_SALT };

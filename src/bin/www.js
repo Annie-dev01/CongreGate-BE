@@ -5,7 +5,7 @@ const debugLib = require('debug');
 const app = require('../index.js');
 const { PORT, NODE_ENV, HOST_NAME } = require('../config/env.js');
 
-const debug = debugLib('<you app name>:server');
+const debug = debugLib('congreGate:server');
 
 // Normalize a port into a number, string or false.
 function normalizePort(val) {

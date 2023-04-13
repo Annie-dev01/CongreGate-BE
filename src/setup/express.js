@@ -4,6 +4,7 @@ const cors = require('cors');
 const logger = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const userRoutes = require('../routes/users.routes');
 
 const app = express();
 // const router = express.Router();
@@ -22,10 +23,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+app.use('/api/v1/users', userRoutes);
+
 //default route
 app.get('/', (req, res) => {
   res.json({
-    message: 'Welcome to <Your App Name>',
+    message: 'Welcome to congreGate',
   });
 });
 
