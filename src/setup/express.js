@@ -5,6 +5,7 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const userRoutes = require('../routes/users.routes');
+const { errorHandler } = require('../middlewares/error.middleware');
 
 const app = express();
 // const router = express.Router();
@@ -22,6 +23,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
+// app.use(errorHandler);
 
 app.use('/api/v1/users', userRoutes);
 

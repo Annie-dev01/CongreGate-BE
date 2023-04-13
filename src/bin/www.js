@@ -4,6 +4,7 @@ const http = require('http');
 const debugLib = require('debug');
 const app = require('../index.js');
 const { PORT, NODE_ENV, HOST_NAME } = require('../config/env.js');
+const { errorHandler } = require('../middlewares/error.middleware.js');
 
 const debug = debugLib('congreGate:server');
 
@@ -57,6 +58,7 @@ app.set('port', port);
 // Create HTTP server
 const server = http.createServer(app);
 
+app.use(errorHandler);
 // Listen on provided port on all network interfaces
 
 server.listen(port, (err) => {
