@@ -61,8 +61,24 @@ const testimonyValidator = async (req, res, next) => {
   }
 };
 
+const announcementValidator = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    title: Joi.string().required(),
+    description: Joi.string().required()
+  });
+  try {
+    await schema.validateAsync(req.body);
+    return next();
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: error.details[0].message });
+  }
+};
+
 module.exports = Object.freeze({
   registrationValidator,
   loginValidator,
   testimonyValidator,
+  announcementValidator,
 });
