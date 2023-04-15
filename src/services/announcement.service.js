@@ -6,7 +6,7 @@ const createAnnouncement = async (payload) => {
         const announcementInstance = await announcementRepo.createAnnouncement(payload);
         const savedAnnouncement = await announcementRepo.saveAnnouncement(announcementInstance);
 
-        if(savedAnnouncement){
+        if(announcementInstance){
             return buildFailedResponse({
                 message: "Announcement already exists!"
             })
@@ -29,7 +29,7 @@ const getAll = async ( query = {}) => {
             return buildFailedResponse({message:"No announcements found!"})
         }
         return buildResponse({
-            message: "Announcemnts fetched",
+            message: "Announcements found",
             data: announcements
         })
     } catch (error) {
