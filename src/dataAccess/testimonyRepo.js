@@ -16,7 +16,8 @@ const getAll = async (query = () => {}) => {
   const data = await Testimony.find(query)
     .limit(limit)
     .skip(skip)
-    .sort('-createdAt');
+    .sort('-createdAt')
+    .populate('createdBy', 'firstName lastName');
   return {
     data,
     count: await Testimony.count(query),
