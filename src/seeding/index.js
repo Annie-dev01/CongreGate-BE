@@ -3,7 +3,9 @@ const User = require('../models/user.model');
 const { generateSalt, hashPassword } = require('../utils');
 
 const seedAdmin = async () => {
-  const foundAdmin = await User.find({ role: 'admin' });
+  const foundAdmin = await User.find({
+    $or: [{ role: 'admin' }, { role: 'superAdmin' }],
+  });
   if (foundAdmin.length < 1) {
     const salt = await generateSalt(Number(BCRYPT_SALT));
     const data = {
