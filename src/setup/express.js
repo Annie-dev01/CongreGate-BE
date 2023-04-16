@@ -28,6 +28,7 @@ app.use(cors());
 
 app.use('/api/v1/users', routes.userRoutes);
 app.use('/api/v1/testimonies', routes.testimonyRoutes);
+app.use('/api/v1/announcements', routes.announcementRoutes);
 
 //default route
 app.get('/', (req, res) => {
