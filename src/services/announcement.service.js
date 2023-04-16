@@ -6,12 +6,6 @@ const createAnnouncement = async (payload) => {
         const announcementInstance = await announcementRepo.createAnnouncement(payload);
         const savedAnnouncement = await announcementRepo.saveAnnouncement(announcementInstance);
 
-        if(announcementInstance){
-            return buildFailedResponse({
-                message: "Announcement already exists!"
-            })
-        };
-
         return buildResponse({
             message: "Announcement added successfully",
             data: savedAnnouncement
