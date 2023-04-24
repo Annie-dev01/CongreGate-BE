@@ -18,12 +18,13 @@ const getAll = async (query = () => {}) => {
     .limit(limit)
     .skip(skip)
     .sort('-createdAt');
-  return {
-    data,
-    count: await User.count(query),
-    skip,
-    limit,
-  };
+  return data;
+  // return {
+  //   data,
+  //   count: await User.count(query),
+  //   skip,
+  //   limit,
+  // };
 };
 
 const getOne = async (query = {}) => {

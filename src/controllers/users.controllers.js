@@ -71,6 +71,17 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+const getOneUser = async (req, res) => {
+  try {
+    const data = await userService.getOne(req.query);
+    return res.status(data.statusCode).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Unable to fetch member at the moment. Please try again later.',
+      error,
+    });
+  }
+};
 
 module.exports = Object.freeze({
   createUser,
@@ -79,4 +90,5 @@ module.exports = Object.freeze({
   getAllUsers,
   deleteUser,
   loginUser,
+  getOneUser,
 });

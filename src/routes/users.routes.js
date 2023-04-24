@@ -6,6 +6,7 @@ const {
   getAllUsers,
   deleteUser,
   loginUser,
+  getOneUser,
 } = require('../controllers/users.controllers');
 const {
   registrationValidator,
@@ -20,6 +21,7 @@ router.post('/login', loginValidator, loginUser);
 router.post('/', protectAdmin, registrationValidator, createUser);
 router.patch('/mark-late-user/:id', protectAdmin, markLateUser);
 router.get('/', protectAdmin, getAllUsers);
+router.get('/get-one', protectAdmin, getOneUser);
 router.delete('/:id', protectAdmin, deleteUser);
 
 module.exports = router;

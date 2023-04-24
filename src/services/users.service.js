@@ -1,3 +1,5 @@
+const { promisify } = require('util');
+
 const userRepo = require('../dataAccess/userRepo');
 const { buildResponse, buildFailedResponse } = require('../utils/responses');
 const {
@@ -7,6 +9,10 @@ const {
   generateSalt,
 } = require('../utils');
 const { BCRYPT_SALT } = require('../config/env');
+const { redisClient } = require('../setup/redis');
+
+const getAsync = promisify(redisClient.get).bind(redisClient);
+const setAsync = promisify(redisClient.setEx).bind(redisClient);
 
 const createUser = async (payload) => {
   try {
@@ -171,14 +177,56 @@ const deleteUser = async (id) => {
 
 const getUsers = async (query = {}) => {
   try {
+    const redisData = await redisClient.get('users');
+    if (redisData) {
+      return buildResponse({
+        message: 'User Fetched',
+        data: JSON.parse(redisData),
+      });
+    }
     const foundUsers = await userRepo.getAll({
       ...query,
       isLate: false,
       deleted: false,
     });
+    await redisClient.setEx('users', 3600, JSON.stringify(foundUsers));
     return buildResponse({ message: 'Users fetched', data: foundUsers });
   } catch (error) {
-    throw new Error(`${error}`);
+    try {
+      const foundUsers = await userRepo.getAll({
+        ...query,
+        isLate: false,
+        deleted: false,
+      });
+      return buildResponse({ message: 'Users fetched', data: foundUsers });
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+};
+
+const getOne = async (query) => {
+  try {
+    const response = await redisClient.get(query._id);
+    if (response) {
+      return buildResponse({
+        message: 'User fetched',
+        data: JSON.parse(response),
+      });
+    } else {
+      const foundUser = await userRepo.getOne(query);
+
+      await redisClient.setEx(query._id, 3600, JSON.stringify(foundUser));
+      return buildResponse({ message: 'User fetched', data: foundUser });
+    }
+  } catch (error) {
+    try {
+      const foundUser = await userRepo.getOne(query);
+      return buildResponse({ message: 'User fetched', data: foundUser });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 };
 
@@ -189,4 +237,5 @@ module.exports = Object.freeze({
   getUsers,
   deleteUser,
   loginUser,
+  getOne,
 });
