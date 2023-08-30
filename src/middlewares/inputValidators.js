@@ -76,6 +76,7 @@ const announcementValidator = async (req, res, next) => {
   }
 };
 
+
 module.exports = Object.freeze({
   registrationValidator,
   loginValidator,

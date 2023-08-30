@@ -1,3 +1,4 @@
+const User = require('../models/user.model');
 const { promisify } = require('util');
 
 const userRepo = require('../dataAccess/userRepo');
@@ -154,6 +155,7 @@ const markLateUser = async (id) => {
     throw new Error(`${error}`);
   }
 };
+
 const deleteUser = async (id) => {
   try {
     const foundUser = await userRepo.getOne({ _id: id });
@@ -230,6 +232,43 @@ const getOne = async (query) => {
   }
 };
 
+
+const registerUser = async (payload) => {
+  const { firstName, middleName, lastName, phone, email, password, dateOfBirth, gender, occupation  } = payload;
+
+  try {
+    const preRegisteredUser = await userRepo.getOne(payload.foundEmail);
+
+    if (!preRegisteredUser) {
+      return buildFailedResponse.json({ message: 'Not a member of the church' }, 403);
+    }
+
+    preRegisteredUser.firstName = firstName;
+    preRegisteredUser.middleName = middleName;
+    preRegisteredUser.lastName = lastName;
+    preRegisteredUser.email = email;
+    preRegisteredUser.phone = phone;
+    preRegisteredUser.dateOfBirth = dateOfBirth;
+    preRegisteredUser.gender = gender;
+    preRegisteredUser.occupation = occupation;
+
+      // hashing the password here
+  const saltRounds = 10;
+  const generatedSalt = await bcrypt.genSalt(saltRounds);
+
+  const hashedPassword = await bcrypt.hash(payload.password, generatedSalt);
+  payload.password = hashedPassword;
+  payload.role = 'member';
+
+    await userRepo.updateUser(preRegisteredUser);
+
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error(error);
+    return buildFailedResponse.json({ message: 'An error occurred' }, 500);
+  }
+};
+
 module.exports = Object.freeze({
   createUser,
   loginAdminUser,
@@ -238,4 +277,5 @@ module.exports = Object.freeze({
   deleteUser,
   loginUser,
   getOne,
+  registerUser, 
 });

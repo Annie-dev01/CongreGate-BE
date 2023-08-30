@@ -1,7 +1,7 @@
 {
   "name": "congregate",
   "version": "1.0.0",
-  "description": "An church management system.",
+  "description": "A church management system.",
   "main": "./src/bin/www.js",
   "repository": "",
   "author": "Joshua Ajagbe",

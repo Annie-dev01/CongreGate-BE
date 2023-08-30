@@ -83,6 +83,19 @@ const getOneUser = async (req, res) => {
   }
 };
 
+const registerUser = async (req, res) => {
+  try {
+    req.body = req.user._id(email);
+    const data = await userService.registerUser(req.body);
+    return res.status(data.statusCode).json(data);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Unable to create user at the moment. Please try again later.',
+      error,
+    });
+  }
+};
+
 module.exports = Object.freeze({
   createUser,
   loginAdminUser,
@@ -91,4 +104,5 @@ module.exports = Object.freeze({
   deleteUser,
   loginUser,
   getOneUser,
+  registerUser,
 });
